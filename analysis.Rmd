@@ -1,0 +1,133 @@
+---
+title: "Kiwifruit firmness — vibration-trace processing pipeline"
+author: "Yuta Kobayashi"
+date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+output:
+  html_document:
+    theme: flatly
+    toc: true
+    toc_float: true
+    code_folding: show
+    fig_width: 7
+    fig_height: 4
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.align = "center")
+```
+
+## Background
+
+Portfolio piece — a synthetic recreation of a non-destructive
+**vibration-based firmness** measurement workflow I built during a
+kiwifruit project. The original recordings are not shareable, so this
+repo simulates qualitatively similar two-channel waveforms (stem end
+and blossom end), recovers the characteristic minimum from each trace,
+extracts its time `t_min`, and looks for trial-level structure in
+`(CH1 t_min, CH2 t_min)` space.
+
+The pipeline reproduces the four steps I used in practice:
+
+1. acquire two-channel time-series per fruit;
+2. detect the diagnostic minimum on each channel;
+3. plot every trace with a coloured marker at the detected minimum
+   for visual QA;
+4. summarise the dataset as a `CH1` × `CH2` scatter coloured by trial,
+   to surface batch-to-batch drift.
+
+## Simulated data
+
+```{r simulate, results = "hide"}
+source("R/simulate.R")
+```
+
+```{r load}
+source("R/process.R")
+traces <- readRDS("data/traces.rds")
+n_fruit <- length(unique(traces$fruit))
+n_trial <- length(unique(traces$trial))
+sprintf("%d fruits across %d trials, %d samples per trace.",
+        n_fruit, n_trial, sum(traces$fruit == 1))
+```
+
+## Example traces with detected minima
+
+Vertical bars mark the detected minimum on each channel
+(orange = CH1, green = CH2).
+
+```{r example-trace, fig.height = 3.4}
+plot_trace(traces, fruit_id = 4)
+plot_trace(traces, fruit_id = 60)
+plot_trace(traces, fruit_id = 95)
+```
+
+A larger PNG gallery is rendered by `R/batch_plots.R` into
+`figures/traces/`.
+
+## Per-fruit summary
+
+```{r summarise}
+summary_df <- summarise_traces(traces)
+head(summary_df)
+```
+
+```{r summary-wide}
+summary_wide <- tidyr::pivot_wider(summary_df,
+                                   id_cols = c(trial, trial_no, fruit),
+                                   names_from = channel,
+                                   values_from = t_min_ms)
+```
+
+## CH1 vs CH2 scatter (pattern detection)
+
+Each point is one fruit. Most points sit near the CH1 = CH2 diagonal;
+vertical excursions are CH2-only outliers (skin defect on the blossom
+end of the fruit, in the original interpretation). Trial-level
+clustering shows the ripening drift.
+
+```{r scatter, fig.width = 7, fig.height = 5.2}
+library(ggplot2)
+ggplot(summary_wide, aes(CH1, CH2, colour = trial)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed",
+              colour = "grey60") +
+  geom_point(size = 2.2, alpha = 0.85) +
+  scale_x_continuous(limits = c(0.4, 1.05)) +
+  scale_y_continuous(limits = c(0.4, 1.20)) +
+  labs(title = "CH2 vs CH1 (synthetic, 2018-2019 style)",
+       x = "CH1 t_min (ms)",
+       y = "CH2 t_min (ms)",
+       colour = "Trial") +
+  theme_minimal(base_size = 12) +
+  theme(legend.key.height = unit(0.8, "lines"))
+
+ggsave("figures/scatter_ch1_ch2.png", width = 7, height = 5.2, dpi = 150)
+```
+
+## Trial-level drift
+
+```{r drift, fig.height = 4}
+ggplot(summary_df, aes(trial_no, t_min_ms, colour = channel)) +
+  geom_jitter(width = 0.15, alpha = 0.7, size = 1.6) +
+  stat_summary(fun = median, geom = "line", linewidth = 1) +
+  scale_colour_manual(values = c(CH1 = "#E41A1C", CH2 = "#00BFC4")) +
+  scale_x_continuous(breaks = seq_along(levels(summary_df$trial)),
+                     labels = levels(summary_df$trial)) +
+  labs(x = NULL, y = "t_min (ms)",
+       title = "Detected minimum drifts later as fruit softens") +
+  theme_minimal(base_size = 12) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("figures/drift_by_trial.png", width = 7, height = 4, dpi = 150)
+```
+
+## Disclaimer
+
+Traces are simulated with a damped Gabor wavelet plus a small initial
+transient and Gaussian noise; the trial-level drift was hand-tuned for
+illustration. The repo demonstrates **the processing pipeline**, not a
+biological finding.
+
+```{r session}
+sessionInfo()
+```
