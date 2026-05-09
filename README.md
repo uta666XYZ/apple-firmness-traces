@@ -5,9 +5,7 @@ Portfolio piece — a synthetic recreation of a non-destructive
 fruit-quality project. Two-channel waveforms (stem end & calyx end),
 minimum detection, batch QA plots, and a `CH1 × CH2` summary scatter.
 
-🌐 **Live report:** https://uta666xyz.github.io/apple-firmness-traces/
-*(enabled once the repo is made public + GitHub Pages is turned on under
-Settings → Pages → Deploy from branch → `main` / root)*
+[![Live report](https://img.shields.io/badge/Live-report-blue?logo=github)](https://uta666xyz.github.io/apple-firmness-traces/)
 
 The original waveforms are not shareable, so the included data is
 simulated with a damped Gabor wavelet plus a small initial transient
