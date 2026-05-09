@@ -9,20 +9,22 @@ minimum detection, batch QA plots, and a `CH1 × CH2` summary scatter.
 
 The original waveforms are not shareable, so the included data is
 simulated with a damped Gabor wavelet plus a small initial transient
-and additive Gaussian noise. The qualitative shape and the trial-level
-drift mirror what I observed on the real instrument.
+and additive Gaussian noise. The qualitative shape mirrors what I
+observed on the real instrument.
 
 ## What's here
 
 * `R/simulate.R` — generates `data/traces.rds`
-  (13 trials × 8 fruits × 2 channels, sampled at 50 kHz over 2 ms).
+  (13 monthly trials Sep-24 → Oct-25 × 8 fruits × 2 channels, sampled
+  at 50 kHz over 2 ms).
 * `R/process.R` — `detect_min()` (smoothed argmin), `summarise_traces()`,
   and `plot_trace()` (ggplot grey-theme replica with orange/green
   vertical bars at the detected minima).
 * `R/batch_plots.R` — writes ~26 per-fruit PNGs to `figures/traces/`.
 * `analysis.Rmd` — knit to a self-contained HTML report containing
-  example traces, the CH1 × CH2 scatter coloured by trial, and the
-  trial-level `t_min` drift plot.
+  example traces, the CH1 × CH2 scatter coloured by trial, and an
+  **SS1** view of the same scatter coloured by a continuous firmness
+  index (rainbow gradient: red = soft, purple = firm).
 
 ## Reproducing
 
@@ -38,10 +40,10 @@ rmarkdown::render("analysis.Rmd")   # writes analysis.html + figures/*.png
 * **Per-trace plots** — two channels (CH1 stem-end red, CH2 calyx-end
   cyan), each annotated with a vertical bar at its detected minimum.
 * **CH1 × CH2 scatter** — most fruits sit near the diagonal; vertical
-  excursions are CH2-only outliers. Trials cluster along the diagonal
-  by ripening / storage stage.
-* **Drift by trial** — median `t_min` increases monotonically across
-  the sampling window as fruit softens.
+  excursions are CH2-only outliers.
+* **SS1 — firmness gradient scatter** — same axes, coloured by
+  `0.5 / sqrt(CH1 · CH2)`. Lower-left = firmer (early minimum on both
+  channels); upper-right = softer.
 
 ## Disclaimer
 

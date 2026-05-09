@@ -6,14 +6,14 @@
 # generated per fruit. Multiple trials sampled across a storage window give
 # the dataset its time structure (firmer early -> softer late => later t_min).
 
-set.seed(20240501)
+set.seed(20250501)
 
 dir.create("data", showWarnings = FALSE)
 
 # -- design ------------------------------------------------------------------
-trials <- c("Sep-18", "Oct-18", "Nov-18", "Dec-18", "Jan-19",
-            "Feb-19", "Mar-19", "Apr-19", "May-19", "Jun-19",
-            "Jul-19", "Sep-19", "Oct-19")
+trials <- c("Sep-24", "Oct-24", "Nov-24", "Dec-24", "Jan-25",
+            "Feb-25", "Mar-25", "Apr-25", "May-25", "Jun-25",
+            "Jul-25", "Sep-25", "Oct-25")
 n_fruit_per_trial <- 8
 fs    <- 50000                              # 50 kHz sampling
 t_max <- 0.002                              # 2 ms window
