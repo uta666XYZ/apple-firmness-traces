@@ -101,48 +101,39 @@ ggplot(summary_wide, aes(CH1, CH2, colour = trial)) +
 ggsave("figures/scatter_ch1_ch2.png", width = 7, height = 5.2, dpi = 150)
 ```
 
-## SS1 — CH2 vs CH1 with continuous firmness gradient
+## SS1 — CH2 vs CH1 with continuous t_min gradient
 
-Same scatter as above but coloured by a **continuous firmness index**
-derived from the per-fruit minimum times. Firmer fruit vibrate at
-shorter `t_min` on both channels, so we define
-
-$$
-\text{firmness} \;=\; \frac{c}{\sqrt{\text{CH1} \cdot \text{CH2}}}
-$$
-
-with the constant `c` chosen so the index sits roughly in the
-**0.5 – 1.5** range. This produces a rainbow gradient across the
-diagonal — soft (red, top-right) to firm (purple, bottom-left).
+Same scatter as above but coloured by the **mean t_min** across the
+two channels — a purely geometric ranking that highlights the
+diagonal trend without claiming any biophysical firmness model.
+Earlier minima cluster in the lower-left (purple/blue); later minima
+in the upper-right (orange/red).
 
 ```{r ss1-firmness, fig.width = 7.2, fig.height = 5.4}
-summary_wide$firmness <- 0.5 / sqrt(summary_wide$CH1 * summary_wide$CH2)
+summary_wide$t_min_mean <- (summary_wide$CH1 + summary_wide$CH2) / 2
 
-firmness_palette <- c("red", "orange", "gold", "yellowgreen",
-                      "forestgreen", "deepskyblue", "blueviolet")
+ss1_palette <- c("blueviolet", "deepskyblue", "forestgreen",
+                 "yellowgreen", "gold", "orange", "red")
 
-ggplot(summary_wide, aes(CH1, CH2, colour = firmness)) +
+ggplot(summary_wide, aes(CH1, CH2, colour = t_min_mean)) +
   geom_abline(slope = 1, intercept = 0, linetype = "dashed",
               colour = "grey60") +
   geom_point(size = 2.4, alpha = 0.9) +
   scale_x_continuous(limits = c(0.4, 1.05)) +
   scale_y_continuous(limits = c(0.4, 1.20)) +
-  scale_colour_gradientn(colours = firmness_palette,
-                         limits = c(0.5, 1.5),
-                         oob    = scales::squish) +
-  labs(title = "SS1 — CH2 vs CH1, coloured by firmness index",
+  scale_colour_gradientn(colours = ss1_palette) +
+  labs(title = "SS1 — CH2 vs CH1, coloured by mean t_min",
        x = "CH1 t_min (ms)",
        y = "CH2 t_min (ms)",
-       colour = "Firmness") +
+       colour = "mean t_min (ms)") +
   theme_minimal(base_size = 12) +
   theme(legend.key.height = unit(1.2, "lines"))
 
 ggsave("figures/ss1_firmness.png", width = 7.2, height = 5.4, dpi = 150)
 ```
 
-Lower-left = firmer (early minimum on both channels); upper-right =
-softer (later minimum on both channels). Off-diagonal points indicate
-asymmetry between stem-end and calyx-end response.
+Off-diagonal points indicate asymmetry between stem-end and calyx-end
+response on the same fruit.
 
 ## Disclaimer
 

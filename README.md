@@ -23,8 +23,8 @@ observed on the real instrument.
 * `R/batch_plots.R` — writes ~26 per-fruit PNGs to `figures/traces/`.
 * `analysis.Rmd` — knit to a self-contained HTML report containing
   example traces, the CH1 × CH2 scatter coloured by trial, and an
-  **SS1** view of the same scatter coloured by a continuous firmness
-  index (rainbow gradient: red = soft, purple = firm).
+  **SS1** view of the same scatter coloured by mean `t_min` (rainbow
+  gradient: purple = early minimum, red = late minimum).
 
 ## Reproducing
 
@@ -41,9 +41,9 @@ rmarkdown::render("analysis.Rmd")   # writes analysis.html + figures/*.png
   cyan), each annotated with a vertical bar at its detected minimum.
 * **CH1 × CH2 scatter** — most fruits sit near the diagonal; vertical
   excursions are CH2-only outliers.
-* **SS1 — firmness gradient scatter** — same axes, coloured by
-  `0.5 / sqrt(CH1 · CH2)`. Lower-left = firmer (early minimum on both
-  channels); upper-right = softer.
+* **SS1 — t_min gradient scatter** — same axes, coloured by the mean
+  of CH1 and CH2 minima. Lower-left = early minimum on both channels;
+  upper-right = late minimum on both channels.
 
 ## Disclaimer
 
