@@ -44,7 +44,7 @@ plot_trace <- function(traces, fruit_id, trace_no = fruit_id) {
                               names_to = "Channel", values_to = "Signal")
   long$Channel <- factor(long$Channel,
                          levels = c("CH1", "CH2"),
-                         labels = c("CH1 Stem end", "CH2 Blossom end"))
+                         labels = c("CH1 Stem end", "CH2 Calyx end"))
 
   ggplot(long, aes(time_s * 1000, Signal, colour = Channel)) +
     geom_line(linewidth = 0.4) +
@@ -53,7 +53,7 @@ plot_trace <- function(traces, fruit_id, trace_no = fruit_id) {
     geom_vline(xintercept = m2$t_min * 1000, colour = "forestgreen",
                linewidth = 0.8) +
     scale_colour_manual(values = c("CH1 Stem end" = "#E41A1C",
-                                   "CH2 Blossom end" = "#00BFC4")) +
+                                   "CH2 Calyx end" = "#00BFC4")) +
     scale_x_continuous(limits = c(0, 2), expand = c(0, 0)) +
     labs(x = "Time (ms)", y = "Signal (A.U.)",
          title = sprintf("Fruit No.%d, Trace No.%d",

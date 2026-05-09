@@ -1,9 +1,9 @@
 # R/simulate.R
-# Synthetic vibration-trace generator for the kiwifruit firmness portfolio.
+# Synthetic vibration-trace generator for the apple firmness portfolio.
 #
 # Each "trace" is a damped Gabor-like waveform with a small initial transient
-# and additive noise. Two channels (CH1 = stem end, CH2 = blossom end) are
-# generated per fruit. Multiple trials sampled across a ripening window give
+# and additive noise. Two channels (CH1 = stem end, CH2 = calyx end) are
+# generated per fruit. Multiple trials sampled across a storage window give
 # the dataset its time structure (firmer early -> softer late => later t_min).
 
 set.seed(20240501)

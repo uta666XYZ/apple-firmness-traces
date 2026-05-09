@@ -1,5 +1,5 @@
 ---
-title: "Kiwifruit firmness — vibration-trace processing pipeline"
+title: "Apple firmness — vibration-trace processing pipeline"
 author: "Yuta Kobayashi"
 date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
@@ -21,9 +21,9 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
 
 Portfolio piece — a synthetic recreation of a non-destructive
 **vibration-based firmness** measurement workflow I built during a
-kiwifruit project. The original recordings are not shareable, so this
+fruit-quality project. The original recordings are not shareable, so this
 repo simulates qualitatively similar two-channel waveforms (stem end
-and blossom end), recovers the characteristic minimum from each trace,
+and calyx end), recovers the characteristic minimum from each trace,
 extracts its time `t_min`, and looks for trial-level structure in
 `(CH1 t_min, CH2 t_min)` space.
 
@@ -82,9 +82,9 @@ summary_wide <- tidyr::pivot_wider(summary_df,
 ## CH1 vs CH2 scatter (pattern detection)
 
 Each point is one fruit. Most points sit near the CH1 = CH2 diagonal;
-vertical excursions are CH2-only outliers (skin defect on the blossom
+vertical excursions are CH2-only outliers (skin defect on the calyx
 end of the fruit, in the original interpretation). Trial-level
-clustering shows the ripening drift.
+clustering shows the ripening / storage drift.
 
 ```{r scatter, fig.width = 7, fig.height = 5.2}
 library(ggplot2)

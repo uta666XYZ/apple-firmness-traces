@@ -1,11 +1,11 @@
-# Kiwifruit firmness — vibration-trace processing
+# Apple firmness — vibration-trace processing
 
 Portfolio piece — a synthetic recreation of a non-destructive
 **vibration-based firmness** measurement pipeline I built during a
-kiwifruit project. Two-channel waveforms (stem end & blossom end),
+fruit-quality project. Two-channel waveforms (stem end & calyx end),
 minimum detection, batch QA plots, and a `CH1 × CH2` summary scatter.
 
-🌐 **Live report:** https://uta666xyz.github.io/kiwifruit-firmness-traces/
+🌐 **Live report:** https://uta666xyz.github.io/apple-firmness-traces/
 *(enabled once the repo is made public + GitHub Pages is turned on under
 Settings → Pages → Deploy from branch → `main` / root)*
 
@@ -37,11 +37,11 @@ rmarkdown::render("analysis.Rmd")   # writes analysis.html + figures/*.png
 
 ## What the figures show
 
-* **Per-trace plots** — two channels (CH1 stem-end red, CH2 blossom-end
+* **Per-trace plots** — two channels (CH1 stem-end red, CH2 calyx-end
   cyan), each annotated with a vertical bar at its detected minimum.
 * **CH1 × CH2 scatter** — most fruits sit near the diagonal; vertical
   excursions are CH2-only outliers. Trials cluster along the diagonal
-  by ripening stage.
+  by ripening / storage stage.
 * **Drift by trial** — median `t_min` increases monotonically across
   the sampling window as fruit softens.
 
