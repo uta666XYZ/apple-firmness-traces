@@ -1,6 +1,5 @@
 ---
 title: "Apple firmness — vibration-trace processing pipeline"
-author: "Yuta Kobayashi"
 date: "`r format(Sys.Date(), '%Y-%m-%d')`"
 output:
   html_document:
